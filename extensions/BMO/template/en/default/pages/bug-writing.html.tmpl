@@ -1,11 +1,324 @@
 [%# This Source Code Form is subject to the terms of the Mozilla Public
   # License, v. 2.0. If a copy of the MPL was not distributed with this
-  # file, You can obtain one at http://mozilla.org/MPL/2.0/.
+  # file, You can obtain one at https://mozilla.org/MPL/2.0/.
   #
   # This Source Code Form is "Incompatible With Secondary Licenses", as
   # defined by the Mozilla Public License, v. 2.0.
   #%]
 
-[% PROCESS global/redirect.html.tmpl
-   url = "https://developer.mozilla.org/docs/Mozilla/QA/Bug_writing_guidelines"
+[% PROCESS global/header.html.tmpl
+   title = "Bug Writing Guidelines"
 %]
+
+<h1>[% terms.Bug %] Writing Guidelines</h1>
+
+<p>This page assumes you&apos;d like to contribute to the Mozilla project by collecting enough information
+  to enter a useful [% terms.bug %] report in [% terms.Bugzilla %] , the Mozilla [% terms.bug %] tracking system. Thank you!</p>
+
+<p>If you&apos;re new to reporting [% terms.bugs %], you may want to try getting help from the more experienced
+  contributors. If you&apos;re going to report a Firefox [% terms.bug %], you can also get assistance in the
+  <a href="https://matrix.to/#/!IzVMcpFSIBAkaCECOW:mozilla.org?via=mozilla.org">#fx-desktop-community room
+  </a>on <a href="https://chat.mozilla.org">Mozilla Matrix server</a>. For a list of other projects
+  (e.g., Thunderbird, SeaMonkey), you can find the appropriate rooms on
+  <a href="https://wiki.mozilla.org/Matrix">Matrix</a>.</p>
+
+<h2 id="How_to_report_a_bug">How to report a [% terms.bug %]</h2>
+
+<h3 id="Open_a_new_bug_report_for_each_issue!">Open a new [% terms.bug %] report for each issue!</h3>
+
+<p>So an effective [% terms.bug %] fix workflow will be completed for each issue.</p>
+
+<h3 id="Other_details_you_should_heed">Other details you should heed</h3>
+
+<ol>
+ <li>Figure out the <strong>steps to reproduce a [% terms.bug %]</strong>:
+
+  <ul>
+   <li>If you have <a href="#Writing_precise_steps_to_reproduce">precise steps to reproduce</a>
+     — great! — you&apos;re on your way to reporting a useful [% terms.bug %] report.</li>
+   <li>If you can reproduce occasionally, but not after following specific steps, you must provide
+     additional information for the [% terms.bug %] to be useful.</li>
+   <li>If you can&apos;t reproduce the problem, there&apos;s probably no use in reporting it, unless
+     you provide unique information about its occurrence.</li>
+  </ul>
+ </li>
+ <li>Make sure your software is up to date. Ideally, test an in-development version to see whether
+   your [% terms.bug %] has already been fixed (e.g. <a href="https://www.mozilla.com/en-US/firefox/channel/">
+   Firefox Beta</a>, or bleeding-edge <a class="link-https" href="https://nightly.mozilla.org/">
+   Nightly</a>).</li>
+ <li>When reporting a Firefox [% terms.bug %], first check if you can reproduce the [% terms.bug %] in a
+   <a href="https://support.mozilla.org/en-US/kb/profile-manager-create-remove-switch-firefox-profiles">
+   new Firefox profile</a>. If the [% terms.bug %] only happens in your existing profile, try to figure out what
+   <a href="https://support.mozilla.org/en-US/kb/troubleshoot-extensions-themes-to-fix-problems">
+   settings, extensions</a>, or <a href="https://support.mozilla.org/en-US/kb/profiles-where-firefox-stores-user-data">
+   files in your profile</a> are needed to reproduce the [% terms.bug %].
+   <ul>
+     <li>If the [% terms.bug %] seems egregious (i.e. obviously affecting a large portion of users), there&apos;s
+       probably something unusual about your setup that&apos;s a necessary part of the steps to reproduce
+       the [% terms.bug %]. You have much better chances of figuring it out than a developer who does not have access
+       to your system.</li>
+     <li>If the [% terms.bug %] falls into one of specific types of [% terms.bugs %] listed in a section
+       below, it may still be useful even if you can&apos;t reproduce it in a new Firefox profile.</li>
+   </ul></li>
+ <li>Open the <a class="link-https" href="https://bugzilla.mozilla.org/enter_bug.cgi?format=guided">
+   Enter a new [% terms.bug %]</a> form, which will guide you through most of the [% terms.bug %] reporting process:
+   <ul>
+     <li>Create a [% terms.Bugzilla %]  account if you don&apos;t have one already, select the product having the [% terms.bug %].</li>
+     <li>Enter a <strong>clear unique summary</strong> as <a href="#Writing_a_clear_summary">described below</a>;
+       <a href="[% basepath FILTER none %]query.cgi?format=instant&amp;product=Firefox">check if the [% terms.bug %]
+       has already been reported</a>.</li>
+     <li>Provide <strong>precise steps to reproduce</strong>, <strong>expected results</strong> and <strong>actual
+       results</strong> as <a href="#Writing_precise_steps_to_reproduce">described in the following section</a>.</li>
+     <li>Provide additional information (also <a href="#Providing_additional_information">described below</a>),
+       especially if you can&apos;t reproduce the [% terms.bug %] in a new profile; and/or by reporting a <strong>crash</strong>,
+       <strong>memory usage</strong>, <strong>performance</strong>, <strong>regression</strong> [% terms.bug %]; or if the
+       problem is with a specific web site.</li>
+   </ul></li>
+ <li>If you have multiple issues, please file separate [% terms.bug %] reports.</li>
+</ol>
+
+<h2 id="Writing_a_clear_summary">Writing a clear summary</h2>
+
+<p>How would you describe the [% terms.bug %] using approximately 10 words? This is the first part of your [% terms.bug %] report a
+  triager or developer will see.</p>
+
+<p>A good summary should quickly and uniquely identify a [% terms.bug %] report. It should explain the problem,
+  not your suggested solution.</p>
+
+<ul>
+ <li>Good: &quot;Cancelling a File Copy dialog crashes File Manager&quot;</li>
+ <li>Bad: &quot;Software crashes&quot;</li>
+</ul>
+
+<ul>
+ <li>Good: &quot;Down-arrow scrolling doesn&apos;t work in &lt;textarea&gt; styled with overflow:hidden&quot;</li>
+ <li>Bad: &quot;Browser should work with my web site&quot;</li>
+</ul>
+
+<h2 id="Writing_precise_steps_to_reproduce">Writing precise steps to reproduce</h2>
+
+<p>How can a developer reproduce the [% terms.bug %] on his or her own computer?</p>
+
+<p>Steps to reproduce are the <strong>most important part of any [% terms.bug %] report</strong>. If a developer is able
+  to reproduce the [% terms.bug %], the [% terms.bug %] is very likely to be fixed. If the steps are unclear, it might not even be
+  possible to know whether the [% terms.bug %] has been fixed.</p>
+
+<table class="standard" width="60%">
+  <tbody>
+    <tr>
+      <th align="left"><b>What should you include in a [% terms.bug %] report?</b></th>
+      <th align="left"><b>Good (precise) example</b></th>
+      <th align="left"><b>Bad (imprecise)</b></th>
+    </tr>
+    <tr>
+      <td>Indicate whether you can reproduce the [% terms.bug %] at will, occasionally, or not at all.</td>
+      <td>I can reproduce by following these steps:</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>
+        <p>Describe your method of interacting with Firefox in addition to the intent of each step.</p>
+      </td>
+      <td>
+        <p>1. Start Firefox by clicking on the desktop icon<br>
+           2. Press Cmd+N (or Ctrl+N for Windows users) to open a new browser window<br>
+           3. Paste <a class="link-https" href="https://mail.google.com/" rel="freelink">https://mail.google.com/</a>
+              in the address bar and press Enter</p>
+      </td>
+      <td>Open Gmail in another window</td>
+    </tr>
+    <tr>
+      <td>
+        <p>After your steps, precisely describe the <strong>observed (actual) result</strong> and the
+          <strong>expected result</strong>. Clearly separate facts (observations) from speculations.</p>
+      </td>
+      <td>
+        <strong>Expected results</strong>: My Inbox displays correctly.<br>
+        <strong>Actual results</strong>: My inbox displays the message &apos;Your browser does not support cookies (error -91)&apos;.
+      </td>
+      <td>
+        <p>&quot;It doesn&apos;t work&quot;</p>
+        <p>&quot;Page displays incorrectly&quot;</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="Providing_additional_information">Providing additional information</h2>
+
+<p>The following information is requested for most [% terms.bug %] reports. You can save time by providing
+  this information below the Expected results. If you need to attach multiple files,
+  you can do so after submitting the report.</p>
+
+<h3 id="For_specific_types_of_bugs">For specific types of [% terms.bugs %]</h3>
+
+<p>If you are reporting a <strong>crash [% terms.bug %]</strong>, please
+  <a href="https://firefox-source-docs.mozilla.org/contributing/debugging/stacktrace_report.html">
+  include a Breakpad ID or attach stack trace</a>, and include the crash signature in the [% terms.bug %]
+  summary as well as in the <strong>Crash Signature</strong> field.</p>
+
+<p>If you are reporting a <strong>memory use or leak [% terms.bug %]</strong>, please
+  <a href="https://firefox-source-docs.mozilla.org/performance/memory/about_colon_memory.html">
+  attach the output of about:memory</a>. Ideally, find steps to reproduce an increase in what is shown
+  in about:memory (even after clicking the &quot;Minimize memory usage&quot; button at the bottom).
+  If you have trouble finding steps to reproduce, try the Firefox Support page titled
+  <a href="https://support.mozilla.org/en-US/kb/firefox-uses-too-much-memory-or-cpu-resources">
+  Firefox Uses Too Much Memory (Ram) - How to Fix</a>.</p>
+
+<p>If you are reporting a <strong>[% terms.bug %] about slowness or high CPU usage</strong>, please
+  <a href="https://firefox-source-docs.mozilla.org/performance/reporting_a_performance_problem.html">
+  provide a link to the performance profile in the [% terms.bug %]</a>.</p>
+
+<p>If you are reporting a <strong>hang</strong> (beachball on macOS or &quot;not responding&quot; on Windows),
+  please follow the instructions first in <a href="https://support.mozilla.org/en-US/kb/firefox-hangs-or-not-responding">
+  Firefox hangs or is not responding - How to fix</a>.</p>
+
+<p>If you are reporting a [% terms.bug %] involving a <strong>Flash hang</strong>, please visit
+  <a href="https://wiki.mozilla.org/Flash/Hang_Debugging">https://wiki.mozilla.org/Flash/Hang_Debugging</a>
+  to learn how to provide useful information for developers.</p>
+
+<p>If you are reporting a <strong>[% terms.bug %] involving a specific web page</strong>, please try to make a
+  reduced testcase and attach it to the [% terms.bug %] report. If you don&apos;t have time or expertise,
+  please report the issue to <a href="https://webcompat.com/"> webcompat.com</a> instead, where our volunteers
+  will do this for you.</p>
+
+<p>If the [% terms.bug %] was <strong>recently introduced</strong>, finding a
+  <a href="https://mozilla.github.io/mozregression/quickstart.html">regression window</a> can help identify
+  the cause of the [% terms.bug %].</p>
+
+<p><a href="https://www.chiark.greenend.org.uk/~sgtatham/bugs.html#intermittent">What if my [% terms.bug %] seems
+  &quot;random&quot; or &quot;intermittent&quot;?</a></p>
+
+<h3 id="For_most_Firefox_bugs">For most Firefox [% terms.bugs %]</h3>
+
+<p>You should provide the following information for most Firefox [% terms.bugs %].</p>
+
+<table class="standard" width="60%">
+  <tbody>
+    <tr>
+      <th align="left"><b>What should you include in a [% terms.bug %] report?</b></th>
+      <th align="left"><b>Example</b></th>
+    </tr>
+    <tr>
+      <td>
+        Indicate if the problem can be reproduced using a
+        <a href="https://support.mozilla.org/en-US/kb/profile-manager-create-remove-switch-firefox-profiles">
+        new Firefox profile</a> and any changes you need to make in order to reproduce.
+      </td>
+      <td>
+        The problem can be reproduced in a new profile, but only if Preferences -&gt; Privacy &amp; Security -&gt;
+        Tracking Protection is selected.
+      </td>
+    </tr>
+    <tr>
+      <td>If you can only reproduce with an existing profile try to figure out what
+        <a href="https://support.mozilla.org/en-US/kb/troubleshoot-extensions-themes-to-fix-problems">
+        settings, extensions</a>, or <a href="https://support.mozilla.org/en-US/kb/profiles-where-firefox-stores-user-data">
+        files in your profile</a> are needed to reproduce the [% terms.bug %]. If you skip the step,
+        <a href="https://support.mozilla.org/en-US/kb/use-troubleshooting-information-page-fix-firefox">save the
+        troubleshooting information from about:support</a> to a file and attach it to the [% terms.bug %] report.
+      </td>
+      <td>
+        I can&apos;t reproduce in a new profile, about:support information from the offending profile is attached.
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <p>Indicate if the problem can be reproduced using the <a href="https://nightly.mozilla.org/">
+          latest Nightly build</a>. Include the <strong>Build ID</strong> from
+          <a href="https://support.mozilla.org/en-US/kb/use-troubleshooting-information-page-fix-firefox">
+          about:support</a>.</p>
+        <p>If possible, test using the new Firefox profile you created. If you need to test the Nightly build with
+          your regular profile, you might want to
+          <a href="https://support.mozilla.org/en-US/kb/back-and-restore-information-firefox-profiles">
+          back up the profile</a> first, since the pre-release build may corrupt your data.</p>
+      </td>
+      <td>
+        The problem can be reproduced on the latest Nightly (Build ID 20170416100136).
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<hr>
+
+<h2 id="Advanced">Advanced</h2>
+
+<h3 id="Finding_the_correct_product_and_component" name="Finding_the_correct_product_and_component">
+  <strong style="font-weight: bold;">Finding the correct product and component</strong></h3>
+
+<p>You will be asked to categorize your [% terms.bug %] into a &quot;product&quot; and a &quot;component&quot; within
+  that product, in order to direct your report to the correct developers.</p>
+
+<p>If you&apos;re using Firefox, the [% terms.bug %] is most likely in &quot;Firefox&quot;, &quot;Toolkit&quot;, or &quot;Core&quot;.</p>
+
+<ul>
+  <li><a class="link-https" href="https://bugzilla.mozilla.org/describecomponents.cgi?product=Firefox">
+    List of components in the &quot;Firefox&quot; product</a> - Most parts of Firefox that you interact with directly</li>
+  <li><a class="link-https" href="https://bugzilla.mozilla.org/describecomponents.cgi?product=Toolkit">
+    List of components in the &quot;Toolkit&quot; product</a> - Interface widgets and some frontend features</li>
+  <li><a class="link-https" href="https://bugzilla.mozilla.org/describecomponents.cgi?product=Core">
+    List of components in the &quot;Core&quot; product</a> - Web page rendering, networking, etc.</li>
+</ul>
+
+<p>When in doubt, search for similar [% terms.bugs %] and see which component they are in.</p>
+
+<p>If none of the components seem appropriate, look for a &quot;General&quot; component in the most appropriate product.</p>
+
+<h3 id="General_Outline_of_a_Bug_Report">General Outline of a [% terms.bug %] Report</h3>
+
+<ul>
+  <li><strong>Summary</strong>: How would you describe the [% terms.bug %] in less than 60 characters?
+    It should quickly and uniquely identify a [% terms.bug %] report as well as explain the problem, not your
+    suggested solution. Good: &quot;Canceling a File Copy dialog crashes File Manager&quot; Bad:
+    &quot;Software crashes&quot; Bad: &quot;Browser should work with my web site&quot;</li>
+  <li><strong>Component</strong>: In which sub-part of the software does it exist? This field is a
+    requirement to submit any [% terms.bug %] report. Click the word &quot;Component&quot; to see a description
+    of each component. If none seems appropriate, highlight the &quot;General&quot; component.</li>
+  <li><a name="version"> </a><strong>Version</strong>: select the earliest Version with what the problem can be reproduced:
+    <ul>
+      <li>Developers will use that information to narrow down the commit what introduced a regression</li>
+      <li>QA staff needs that information to distinguish [% terms.bugs %] with similar symptoms, but different roots.
+        <ul>
+          <li>[% terms.bugs %] that definitively appeared in different <em>Product</em> <em>Versions</em> probably will have different roots</li>
+          <li>But [% terms.bugs %] that started with the same <em>Product</em> <em>Version</em> probably are DUPLICATEs</li>
+        </ul>
+      </li>
+      <li><em>Trunk</em> does not allow any useful query. We have <em>Trunk</em> version [% terms.bugs %] from
+        beginning of the project until today, no common characteristics at all what can be tagged with
+        this version. Avoid Trunk, replace it by precise information with what version the problem appeared if you can.</li>
+    </ul>
+  </li>
+  <li><strong>OS</strong>: On which operating system (OS) did you find it? (E.g. Linux, Windows, and Mac.)
+    Example: &quot;<em>If you know the [% terms.bug %] happens on more than one type of operating system, choose
+    &quot;All&quot;. If your OS isn&apos;t listed, choose Other&quot;.</em></li>
+  <li><strong>Description</strong>: The details of your problem report, including:
+    <ul>
+      <li><u>Overview</u>: This is a larger detailed restatement of the summary. An example would be:
+        <em>&quot;Drag-selecting any page crashes Mac builds in the NSGetFactory function&quot;</em>.</li>
+      <li><u>Build Id</u>: To find this either go to the &quot;about:support&quot; page via the location bar
+        or, if you have MozQA&apos;s <a href="https://addons.mozilla.org/en-US/firefox/addon/nightly-tester-tools/">
+        Nightly Tester Tools</a> extension, then go to Tools | Nightly Tester Tools and select the option that
+        contains the output of the build Id. It should look something like this: <em>&quot;Mozilla/5.0
+        (Macintosh; Intel Mac OS X 10.10; rv:38.0) Gecko/20100101 Firefox/38.0 ID:20150330004006 CSet:
+        9e57e9776571&quot;</em>.</li>
+      <li><u>Additional Builds and Platforms</u>: Whether or not the [% terms.bug %] takes place on other platforms
+        (or browsers, if applicable). It should look something like this: <em>&quot;Doesn&apos;t Occur
+        On Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:38.0) Gecko/20100101 Firefox/38.0 ID:20150330004006 CSet:
+        9e57e9776571&quot;</em>.</li>
+    </ul>
+  </li>
+  <li><strong>Steps to Reproduce</strong>: Minimized, easy-to-follow steps that will trigger the [% terms.bug %].
+    If they&apos;re necessary, make sure to include any special setup steps. A good example of this would
+    look like the following:<br>
+    1) View any web page. (I used the default sample page, https://www.google.com/).<br>
+    2) Drag-select the page. Specifically, while holding down the mouse button, drag the mouse pointer
+       downwards from any point in the browser&apos;s content region to the bottom of the browser&apos;s content region.</li>
+  <li><strong>Actual Results</strong>: What the application did after performing the above steps.
+    An example would be: <em>The application crashed.</em></li>
+  <li><strong>Expected Results</strong>: What the application should have done, were the [% terms.bug %] not present.
+    An example would be: <em>The window should scroll downwards. Scrolled content should be selected.
+    Or, at least, the application should not crash.</em></li>
+</ul>
+
+[% PROCESS global/footer.html.tmpl %]

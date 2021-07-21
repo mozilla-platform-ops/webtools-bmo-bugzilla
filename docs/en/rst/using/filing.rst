@@ -8,7 +8,7 @@ Reporting a New Bug
 
 Years of bug writing experience has been distilled for your
 reading pleasure into the `Bug report writing guidelines
-<https://developer.mozilla.org/docs/Mozilla/QA/Bug_writing_guidelines>`_.
+<https://bugzilla.mozilla.org/page.cgi?id=bug-writing.html>`_.
 While some of the advice is Mozilla-specific, the basic principles of
 reporting Reproducible, Specific bugs and isolating the Product you are
 using, the Version of the Product, the Component which failed, the Hardware
